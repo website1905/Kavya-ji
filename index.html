@@ -226,9 +226,9 @@
 </head>
 <body class="text-gray-100">
 
-    <!-- Audio Elements for Background Music -->
+    <!-- Audio Elements for Background Music (Direct Vocaroo Links) -->
     <audio id="bg-audio" loop preload="auto">
-        <source src="bgmusic.mp3" type="audio/mpeg">
+        <source src="https://media1.vocaroo.com/mp3/1iOpi3s0CDNJ" type="audio/mpeg">
     </audio>
 
     <!-- Screen 1: Start Screen -->
@@ -378,11 +378,11 @@
         }
 
         // ==========================================
-        // AUDIO LOGIC UPDATE FOR CHROME AUTOPLAY
+        // AUDIO LOGIC 
         // ==========================================
         function startGame() {
-            // Because this function is triggered by a direct user click, 
-            // Chrome will allow the play() promise to resolve successfully.
+            // Chrome will allow the play() promise to resolve successfully here 
+            // since it's directly triggered by a user click event.
             const playPromise = bgAudio.play();
             
             if (playPromise !== undefined) {
@@ -401,9 +401,9 @@
             // Prevent multiple rapid clicks if it's already spinning/playing
             if (vinyl.classList.contains('spin')) return;
             
-            // Pause current audio, change source, and explicitly load to avoid DOM exceptions
+            // Pause current audio, change source to the new Vocaroo direct link, and explicitly load
             bgAudio.pause();
-            bgAudio.src = 'song1.mp3';
+            bgAudio.src = 'https://media1.vocaroo.com/mp3/1cBUghCvWiOq';
             bgAudio.load(); 
             
             const playPromise = bgAudio.play();
