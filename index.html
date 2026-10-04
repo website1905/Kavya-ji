@@ -226,11 +226,6 @@
 </head>
 <body class="text-gray-100">
 
-    <!-- Audio Elements for Background Music (Direct Vocaroo Links) -->
-    <audio id="bg-audio" loop preload="auto">
-        <source src="https://media1.vocaroo.com/mp3/1iOpi3s0CDNJ" type="audio/mpeg">
-    </audio>
-
     <!-- Screen 1: Start Screen -->
     <div id="screen-1" class="main-card p-8 flex flex-col items-center justify-center min-h-[450px]">
         <h1 class="text-4xl font-bold mb-4 text-center text-white tracking-wide">Sweet October <span class="text-pink-400">🌸</span></h1>
@@ -333,8 +328,11 @@
 
     <script>
         // DOM Elements
-        const bgAudio = document.getElementById('bg-audio');
         let currentScreen = 1;
+        
+        // Dynamic Audio Element creation bypasses some DOM-based strict autoplay policies
+        let bgAudio = new Audio();
+        bgAudio.loop = true;
 
         // Memory Game State
         let flippedCards = [];
@@ -364,7 +362,6 @@
                 toEl.classList.remove('fade-enter');
                 toEl.classList.add('fade-enter-active');
                 
-                // If transitioning to scroll screen, restart animations by cloning node
                 if(toId === 'screen-4') {
                     const scrollWrapper = document.getElementById('scroll-wrapper');
                     const newWrapper = scrollWrapper.cloneNode(true);
@@ -378,11 +375,11 @@
         }
 
         // ==========================================
-        // AUDIO LOGIC 
+        // ROBUST AUDIO LOGIC 
         // ==========================================
         function startGame() {
-            // Chrome will allow the play() promise to resolve successfully here 
-            // since it's directly triggered by a user click event.
+            // Assign source and play EXACTLY during the direct user click
+            bgAudio.src = 'bgmusic.mp3';
             const playPromise = bgAudio.play();
             
             if (playPromise !== undefined) {
@@ -398,13 +395,10 @@
         function changeSong() {
             const vinyl = document.getElementById('vinyl-record');
             
-            // Prevent multiple rapid clicks if it's already spinning/playing
             if (vinyl.classList.contains('spin')) return;
             
-            // Pause current audio, change source to the new Vocaroo direct link, and explicitly load
             bgAudio.pause();
-            bgAudio.src = 'https://media1.vocaroo.com/mp3/1cBUghCvWiOq';
-            bgAudio.load(); 
+            bgAudio.src = 'song1.mp3';
             
             const playPromise = bgAudio.play();
             
@@ -415,7 +409,6 @@
                     console.warn("Song play blocked:", error);
                 });
             } else {
-                // Fallback for older browsers
                 vinyl.classList.add('spin');
             }
         }
@@ -427,9 +420,7 @@
             matchedPairs = 0;
             flippedCards = [];
             
-            // Create pairs
             let deck = [...cardImages, ...cardImages];
-            // Shuffle
             deck.sort(() => Math.random() - 0.5);
 
             deck.forEach((imgSrc, index) => {
