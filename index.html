@@ -110,7 +110,7 @@
             position: relative;
             width: 100%;
             margin: 30px auto;
-            background: #231c18; /* Dark brown/black matching the image */
+            background: #231c18; 
             background-image: 
                 linear-gradient(90deg, rgba(0, 0, 0, 0.4) 2%, transparent 5%, transparent 95%, rgba(0, 0, 0, 0.4) 98%),
                 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.03"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3"/></filter><rect width="100" height="100" filter="url(%23n)"/></svg>');
@@ -185,7 +185,7 @@
 
         .scroll-text {
             font-family: 'Dancing Script', cursive;
-            color: #fff5f8; /* Light glowing text for dark background */
+            color: #fff5f8; 
             line-height: 1.5;
             font-size: 1.4rem;
             position: relative;
@@ -267,7 +267,7 @@
                 💡
             </button>
             <p class="text-center text-[#ff5e8e] font-bold text-lg mb-2">This letter is locked... 🔒</p>
-            <p class="text-center text-sm mb-5 text-gray-300 font-medium">Enter the 4-digit PIN 🗝️️</p>
+            <p class="text-center text-sm mb-5 text-gray-300 font-medium">Enter the 4-digit PIN 🗝</p>
             <div class="flex justify-center mb-5">
                 <input type="password" id="pin-input" maxlength="4" class="w-36 text-center text-3xl tracking-[0.4em] p-3 rounded-xl border-2 border-gray-600 focus:outline-none focus:border-[#ff7aa2] bg-gray-900 text-white shadow-inner" placeholder="••••">
             </div>
@@ -301,7 +301,6 @@
             </div>
         </div>
         
-        <!-- Buttons fade in gracefully along with the text -->
         <div style="opacity: 0; animation: textFadeIn 2.5s ease-in-out 2s forwards;" class="w-full flex flex-col items-center gap-4">
             <button onclick="copyMessage()" class="bg-transparent border-2 border-[#ff7aa2] text-[#ff7aa2] font-bold py-3 px-6 rounded-full hover:bg-[#ff7aa2] hover:text-white transition w-full max-w-[280px] shadow-sm flex items-center justify-center gap-2">
                 Copy the Message 📋💖
@@ -378,11 +377,49 @@
             }, 400);
         }
 
+        // ==========================================
+        // AUDIO LOGIC UPDATE FOR CHROME AUTOPLAY
+        // ==========================================
         function startGame() {
-            bgAudio.play().catch(e => console.warn("Audio play blocked by browser:", e));
+            // Because this function is triggered by a direct user click, 
+            // Chrome will allow the play() promise to resolve successfully.
+            const playPromise = bgAudio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.warn("Audio play blocked by browser:", error);
+                });
+            }
+            
             switchScreen('screen-1', 'screen-2');
             initMemoryGame();
         }
+
+        function changeSong() {
+            const vinyl = document.getElementById('vinyl-record');
+            
+            // Prevent multiple rapid clicks if it's already spinning/playing
+            if (vinyl.classList.contains('spin')) return;
+            
+            // Pause current audio, change source, and explicitly load to avoid DOM exceptions
+            bgAudio.pause();
+            bgAudio.src = 'song1.mp3';
+            bgAudio.load(); 
+            
+            const playPromise = bgAudio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    vinyl.classList.add('spin');
+                }).catch(error => {
+                    console.warn("Song play blocked:", error);
+                });
+            } else {
+                // Fallback for older browsers
+                vinyl.classList.add('spin');
+            }
+        }
+        // ==========================================
 
         function initMemoryGame() {
             const board = document.getElementById('memory-board');
@@ -439,13 +476,6 @@
                 card2.classList.remove('flipped');
             }
             flippedCards = [];
-        }
-
-        function changeSong() {
-            bgAudio.src = 'song1.mp3';
-            bgAudio.play().catch(e => console.warn("Song play blocked:", e));
-            const vinyl = document.getElementById('vinyl-record');
-            vinyl.classList.add('spin');
         }
 
         function toggleModal(modalId) {
