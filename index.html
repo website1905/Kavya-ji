@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sweet October 🌸</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('bg.png'), linear-gradient(135deg, #050b14, #0a192f, #112240);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* Container Styling */
+        .main-card {
+            background-color: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+            width: 90%;
+            max-width: 420px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .btn-pink {
+            background: linear-gradient(135deg, #ff7aa2, #ff5e8e);
+            color: white;
+            border-radius: 50px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 122, 162, 0.4);
+        }
+        .btn-pink:hover, .btn-pink:active {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 122, 162, 0.6);
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .memory-card {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .memory-card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+        .memory-card-front, .memory-card-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .memory-card-front {
+            background: linear-gradient(135deg, #ffb3c6, #ff7aa2);
+            font-size: 2.5rem;
+        }
+        .memory-card-back {
+            background-color: #2a2a2a;
+            transform: rotateY(180deg);
+            padding: 5px;
+        }
+        .memory-card-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .spin {
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .css-scroll-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 30px auto;
+            background: #231c18; /* Dark brown/black matching the image */
+            background-image: 
+                linear-gradient(90deg, rgba(0, 0, 0, 0.4) 2%, transparent 5%, transparent 95%, rgba(0, 0, 0, 0.4) 98%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" opacity="0.03"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3"/></filter><rect width="100" height="100" filter="url(%23n)"/></svg>');
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 10px 20px rgba(0,0,0,0.5);
+            border-radius: 2px;
+            text-align: center;
+            
+            /* Animation properties for smooth unrolling */
+            overflow: hidden;
+            animation: scrollUnroll 3.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        
+        @keyframes scrollUnroll {
+            0% { max-height: 0; padding: 0 20px; opacity: 0; }
+            10% { max-height: 40px; padding: 10px 20px; opacity: 1; }
+            100% { max-height: 800px; padding: 40px 20px; opacity: 1; }
+        }
+
+        .css-scroll-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            height: 30px;
+            background: linear-gradient(to bottom, #7a4b24, #b87333 30%, #cd853f 50%, #7a4b24);
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.1);
+            z-index: 2;
+        }
+        
+        .css-scroll-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: -15px;
+            right: -15px;
+            height: 30px;
+            background: linear-gradient(to top, #7a4b24, #b87333 30%, #cd853f 50%, #7a4b24);
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.1);
+            z-index: 2;
+        }
+        
+        .scroll-ends::before, .scroll-ends::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: linear-gradient(to right, #8b6508, #d4af37, #8b6508);
+            border-radius: 5px;
+            top: -20px;
+            z-index: 3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+        .scroll-ends::before { left: -20px; }
+        .scroll-ends::after { right: -20px; }
+        
+        .scroll-ends-bottom::before, .scroll-ends-bottom::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: linear-gradient(to right, #8b6508, #d4af37, #8b6508);
+            border-radius: 5px;
+            bottom: -20px;
+            z-index: 3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+        .scroll-ends-bottom::before { left: -20px; }
+        .scroll-ends-bottom::after { right: -20px; }
+
+        .scroll-text {
+            font-family: 'Dancing Script', cursive;
+            color: #fff5f8; /* Light glowing text for dark background */
+            line-height: 1.5;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 8px rgba(255, 122, 162, 0.4);
+            
+            /* Text fade-in after unrolling */
+            opacity: 0;
+            animation: textFadeIn 2.5s ease-in-out 1.5s forwards;
+        }
+
+        @keyframes textFadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Scratch Card */
+        #scratch-canvas {
+            touch-action: none;
+            cursor: crosshair;
+            transition: opacity 0.5s ease;
+        }
+        
+        /* Fade transition classes */
+        .fade-enter { opacity: 0; transform: translateY(10px); }
+        .fade-enter-active { opacity: 1; transform: translateY(0); transition: all 0.5s ease; }
+        .fade-exit { opacity: 1; transform: scale(1); }
+        .fade-exit-active { opacity: 0; transform: scale(0.95); transition: all 0.4s ease; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body class="text-gray-100">
+
+    <!-- Audio Elements for Background Music -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="bgmusic.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Screen 1: Start Screen -->
+    <div id="screen-1" class="main-card p-8 flex flex-col items-center justify-center min-h-[450px]">
+        <h1 class="text-4xl font-bold mb-4 text-center text-white tracking-wide">Sweet October <span class="text-pink-400">🌸</span></h1>
+        <p class="text-lg text-center mb-10 text-gray-300 font-medium leading-relaxed">Ready to unlock a surprise,<br><span class="text-xl font-bold text-[#ff5e8e]">Kavya Ji? 💖</span></p>
+        <button onclick="startGame()" class="btn-pink font-semibold py-4 px-10 text-xl w-full max-w-[250px] shadow-lg">
+            Start Game 🎮✨
+        </button>
+    </div>
+
+    <!-- Screen 2: Memory Game -->
+    <div id="screen-2" class="main-card p-6 flex flex-col items-center min-h-[500px] hidden">
+        <h2 class="text-3xl font-bold mb-2 text-center text-white">Match the Memories</h2>
+        <div class="text-4xl mb-6 animate-bounce">🧩</div>
+        <div id="memory-board" class="memory-grid">
+            <!-- Cards injected via JS -->
+        </div>
+    </div>
+
+    <!-- Screen 3: Dashboard & Locker -->
+    <div id="screen-3" class="main-card p-6 flex flex-col items-center hidden relative min-h-[500px]">
+        <h2 class="text-3xl font-bold mb-8 text-center text-white">For You... 💌</h2>
+        
+        <div onclick="changeSong()" class="bg-gray-800 rounded-[25px] p-5 w-full max-w-[280px] flex flex-col items-center shadow-lg cursor-pointer mb-8 transition transform hover:scale-105 border border-gray-700">
+            <div id="vinyl-record" class="w-20 h-20 bg-gray-900 rounded-full border-[6px] border-black flex items-center justify-center mb-3 shadow-inner relative">
+                <div class="w-6 h-6 bg-[#ff7aa2] rounded-full flex items-center justify-center">
+                    <div class="w-2 h-2 bg-white rounded-full"></div>
+                </div>
+            </div>
+            <p class="text-[#ff5e8e] font-bold text-md">Sweet Melody 🎶</p>
+        </div>
+
+        <div id="locker-section" class="w-full max-w-[320px] border-2 border-dashed border-[#ff7aa2] rounded-3xl p-6 relative bg-gray-800/50 shadow-inner">
+            <button onclick="toggleHint()" class="absolute -right-4 -top-4 bg-gray-700 border border-[#ff7aa2] text-[#ff7aa2] rounded-full w-10 h-10 flex items-center justify-center shadow-lg text-xl hover:scale-110 transition z-10 font-bold">
+                💡
+            </button>
+            <p class="text-center text-[#ff5e8e] font-bold text-lg mb-2">This letter is locked... 🔒</p>
+            <p class="text-center text-sm mb-5 text-gray-300 font-medium">Enter the 4-digit PIN 🗝️️</p>
+            <div class="flex justify-center mb-5">
+                <input type="password" id="pin-input" maxlength="4" class="w-36 text-center text-3xl tracking-[0.4em] p-3 rounded-xl border-2 border-gray-600 focus:outline-none focus:border-[#ff7aa2] bg-gray-900 text-white shadow-inner" placeholder="••••">
+            </div>
+            <button onclick="checkPin()" class="btn-pink font-bold py-3 px-6 text-lg w-full">
+                Unlock Scroll 📜🔓
+            </button>
+            <p id="pin-error" class="text-red-500 text-sm font-semibold text-center mt-3 hidden">Incorrect PIN, try again! 🥺</p>
+        </div>
+    </div>
+
+    <!-- Screen 4: Scroll & Reveal -->
+    <div id="screen-4" class="main-card p-6 hidden flex flex-col items-center">
+        <div class="w-full mb-6">
+            <div class="css-scroll-wrapper" id="scroll-wrapper">
+                <div class="scroll-ends"></div>
+                <div class="scroll-ends-bottom"></div>
+                <div class="scroll-text" id="scroll-content">
+                    My dearest sister Kavya ji🥹<br>
+                    Time passes people change or rather<br>
+                    Cut themselves off<br>
+                    We don't talk on regular basis now<br>
+                    We don't talk on any whatsApp group or as such..<br>
+                    But when things get heavy<br>
+                    Things feel complicated<br><br>
+                    I'll try to listen<br>
+                    For meri behna🤭<br>
+                    Have a great great great birthday Kavya ji🥰<br>
+                    Have an amazing year ahead<br>
+                    Always there for you💖
+                </div>
+            </div>
+        </div>
+        
+        <!-- Buttons fade in gracefully along with the text -->
+        <div style="opacity: 0; animation: textFadeIn 2.5s ease-in-out 2s forwards;" class="w-full flex flex-col items-center gap-4">
+            <button onclick="copyMessage()" class="bg-transparent border-2 border-[#ff7aa2] text-[#ff7aa2] font-bold py-3 px-6 rounded-full hover:bg-[#ff7aa2] hover:text-white transition w-full max-w-[280px] shadow-sm flex items-center justify-center gap-2">
+                Copy the Message 📋💖
+            </button>
+            <button onclick="showScratchCard()" class="btn-pink font-bold py-4 px-6 text-lg w-full max-w-[280px] shadow-lg animate-pulse flex items-center justify-center gap-2">
+                Reveal Special Gift 🎁✨
+            </button>
+        </div>
+    </div>
+
+    <!-- Hint Modal -->
+    <div id="hint-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center hidden opacity-0">
+        <div class="bg-gray-800 p-6 rounded-3xl w-72 relative flex flex-col items-center shadow-2xl border border-gray-600">
+            <button onclick="toggleHint()" class="absolute top-2 right-3 text-gray-400 hover:text-[#ff7aa2] text-3xl font-bold">&times;</button>
+            <img src="thought.png" onerror="this.src='https://placehold.co/200x200/ffb3c6/ffffff?text=Thought+Bubble'" alt="Hint" class="w-36 h-36 object-contain mb-4 drop-shadow-lg">
+            <p class="text-center font-bold text-white text-lg">My sister's birthday..</p>
+        </div>
+    </div>
+
+    <!-- Screen 5: Scratch Card Modal -->
+    <div id="scratch-modal" class="fixed inset-0 modal-overlay z-50 flex flex-col items-center justify-center hidden opacity-0">
+        <h3 class="text-white text-4xl font-extrabold mb-8 drop-shadow-xl text-center px-4 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-white">Scratch to reveal! ✨</h3>
+        <div class="relative w-[320px] h-[320px] bg-gray-900 rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-800 box-content">
+            <img src="gift.jpg" onerror="this.src='https://placehold.co/320x320/ffb3c6/ffffff?text=Happy+Birthday+Kavya!'" alt="Special Gift" class="absolute inset-0 w-full h-full object-cover">
+            <!-- Scratch Canvas -->
+            <canvas id="scratch-canvas" width="320" height="320" class="absolute inset-0 z-10 rounded-2xl"></canvas>
+        </div>
+        <button id="close-scratch" onclick="closeScratchCard()" class="mt-10 text-white font-bold bg-white/10 border-2 border-white/30 px-8 py-3 rounded-full hover:bg-white/20 transition hidden text-lg backdrop-blur-sm">Close Gift</button>
+    </div>
+
+    <script>
+        // DOM Elements
+        const bgAudio = document.getElementById('bg-audio');
+        let currentScreen = 1;
+
+        // Memory Game State
+        let flippedCards = [];
+        let matchedPairs = 0;
+        
+        // Exact filenames mapped from image
+        const cardImages = ['card 1.png', 'card 2.jpg', 'card 3.jpg'];
+        
+        let scratchInitialized = false;
+
+        // Transition Screen helper
+        function switchScreen(fromId, toId) {
+            const fromEl = document.getElementById(fromId);
+            const toEl = document.getElementById(toId);
+            
+            fromEl.classList.add('fade-exit-active');
+            setTimeout(() => {
+                fromEl.classList.add('hidden');
+                fromEl.classList.remove('fade-exit-active');
+                
+                toEl.classList.remove('hidden');
+                toEl.classList.add('fade-enter');
+                
+                // Trigger reflow
+                void toEl.offsetWidth; 
+                
+                toEl.classList.remove('fade-enter');
+                toEl.classList.add('fade-enter-active');
+                
+                // If transitioning to scroll screen, restart animations by cloning node
+                if(toId === 'screen-4') {
+                    const scrollWrapper = document.getElementById('scroll-wrapper');
+                    const newWrapper = scrollWrapper.cloneNode(true);
+                    scrollWrapper.parentNode.replaceChild(newWrapper, scrollWrapper);
+                }
+
+                setTimeout(() => {
+                    toEl.classList.remove('fade-enter-active');
+                }, 500);
+            }, 400);
+        }
+
+        function startGame() {
+            bgAudio.play().catch(e => console.warn("Audio play blocked by browser:", e));
+            switchScreen('screen-1', 'screen-2');
+            initMemoryGame();
+        }
+
+        function initMemoryGame() {
+            const board = document.getElementById('memory-board');
+            board.innerHTML = '';
+            matchedPairs = 0;
+            flippedCards = [];
+            
+            // Create pairs
+            let deck = [...cardImages, ...cardImages];
+            // Shuffle
+            deck.sort(() => Math.random() - 0.5);
+
+            deck.forEach((imgSrc, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.image = imgSrc;
+                
+                card.innerHTML = `
+                    <div class="memory-card-inner">
+                        <div class="memory-card-front">🌸</div>
+                        <div class="memory-card-back">
+                            <img src="${encodeURI(imgSrc)}" onerror="this.onerror=null; this.src='https://placehold.co/150x225/2a2a2a/ff7aa2?text=Image'" alt="Memory">
+                        </div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => flipCard(card));
+                board.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (flippedCards.length >= 2 || card.classList.contains('flipped')) return;
+            
+            card.classList.add('flipped');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                setTimeout(checkMatch, 700);
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            if (card1.dataset.image === card2.dataset.image) {
+                matchedPairs++;
+                if (matchedPairs === 3) {
+                    setTimeout(() => {
+                        switchScreen('screen-2', 'screen-3');
+                    }, 800);
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+            }
+            flippedCards = [];
+        }
+
+        function changeSong() {
+            bgAudio.src = 'song1.mp3';
+            bgAudio.play().catch(e => console.warn("Song play blocked:", e));
+            const vinyl = document.getElementById('vinyl-record');
+            vinyl.classList.add('spin');
+        }
+
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth;
+                modal.classList.remove('opacity-0');
+                return true;
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+                return false;
+            }
+        }
+
+        function toggleHint() {
+            toggleModal('hint-modal');
+        }
+
+        function checkPin() {
+            const input = document.getElementById('pin-input').value;
+            const error = document.getElementById('pin-error');
+            if (input === '0510') {
+                error.classList.add('hidden');
+                document.getElementById('locker-section').style.display = 'none';
+                switchScreen('screen-3', 'screen-4');
+            } else {
+                error.classList.remove('hidden');
+                const locker = document.getElementById('locker-section');
+                locker.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-10px)' },
+                    { transform: 'translateX(10px)' },
+                    { transform: 'translateX(-10px)' },
+                    { transform: 'translateX(10px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 400 });
+                document.getElementById('pin-input').value = '';
+            }
+        }
+
+        function copyMessage() {
+            const text = `My dearest sister Kavya ji🥹
+Time passes people change or rather
+Cut themselves off
+We don't talk on regular basis now
+We don't talk on any whatsApp group or as such..
+But when things get heavy
+Things feel complicated
+
+I'll try to listen
+For meri behna🤭
+Have a great great great birthday Kavya ji🥰
+Have an amazing year ahead
+Always there for you💖`;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text)
+                    .then(() => showToast('Message copied! 💖'))
+                    .catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; 
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Message copied! 💖');
+            } catch (err) {
+                showToast('Failed to copy text.');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.textContent = msg;
+            toast.className = "fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-white text-gray-900 px-8 py-4 rounded-full shadow-2xl z-[100] transition-opacity duration-300 font-bold border border-pink-200";
+            document.body.appendChild(toast);
+            setTimeout(() => { 
+                toast.classList.add('opacity-0'); 
+                setTimeout(() => toast.remove(), 300); 
+            }, 2500);
+        }
+
+        function showScratchCard() {
+            toggleModal('scratch-modal');
+            if (!scratchInitialized) {
+                setTimeout(initScratchCard, 50); 
+                scratchInitialized = true;
+            }
+        }
+
+        function closeScratchCard() {
+            toggleModal('scratch-modal');
+        }
+
+        function initScratchCard() {
+            const canvas = document.getElementById('scratch-canvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            let isDrawing = false;
+            let revealed = false;
+            let lastCheck = 0;
+            
+            canvas.width = 320;
+            canvas.height = 320;
+
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, "#4a5568");
+            gradient.addColorStop(0.5, "#2d3748");
+            gradient.addColorStop(1, "#4a5568");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#1a202c';
+            for(let i=0; i<40; i++){
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*2+1, 0, Math.PI*2);
+                ctx.fill();
+            }
+
+            ctx.font = 'bold 28px Poppins, sans-serif';
+            ctx.fillStyle = '#e2e8f0';
+            ctx.textAlign = 'center';
+            ctx.fillText('Scratch Here!', canvas.width/2, canvas.height/2);
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineJoin = "round";
+            ctx.lineCap = "round";
+            ctx.lineWidth = 45; 
+
+            function getCoordinates(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            function scratch(e) {
+                if (!isDrawing || revealed) return;
+                e.preventDefault();
+                
+                requestAnimationFrame(() => {
+                    const { x, y } = getCoordinates(e);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                });
+                
+                const now = Date.now();
+                if (now - lastCheck > 200) {
+                    checkScratchPercent();
+                    lastCheck = now;
+                }
+            }
+
+            canvas.addEventListener('mousedown', (e) => { 
+                isDrawing = true; 
+                const { x, y } = getCoordinates(e);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                scratch(e); 
+            });
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('mouseup', () => { isDrawing = false; checkScratchPercent(); });
+            canvas.addEventListener('mouseleave', () => { isDrawing = false; });
+
+            canvas.addEventListener('touchstart', (e) => { 
+                isDrawing = true; 
+                const { x, y } = getCoordinates(e);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                scratch(e); 
+            }, {passive: false});
+            canvas.addEventListener('touchmove', scratch, {passive: false});
+            canvas.addEventListener('touchend', () => { isDrawing = false; checkScratchPercent(); });
+
+            function checkScratchPercent() {
+                if(revealed) return;
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const pixels = imageData.data;
+                let transparentPixels = 0;
+                
+                const step = 4 * 10; 
+                for (let i = 3; i < pixels.length; i += step) {
+                    if (pixels[i] === 0) {
+                        transparentPixels++;
+                    }
+                }
+                
+                const totalChecks = pixels.length / step;
+                const percent = (transparentPixels / totalChecks) * 100;
+                
+                if (percent > 45) {
+                    revealed = true;
+                    canvas.style.transition = 'opacity 0.8s ease';
+                    canvas.style.opacity = '0';
+                    setTimeout(() => {
+                        canvas.style.display = 'none';
+                        fireConfetti();
+                        document.getElementById('close-scratch').classList.remove('hidden');
+                    }, 800);
+                }
+            }
+        }
+
+        function fireConfetti() {
+            const colors = ['#ff7aa2', '#ffb3c6', '#ffffff', '#ffd700', '#ff5e8e'];
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = Math.random() * 8 + 6 + 'px';
+                confetti.style.height = Math.random() * 15 + 8 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                confetti.style.opacity = Math.random() + 0.5;
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.zIndex = 1000;
+                confetti.style.pointerEvents = 'none';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                document.body.appendChild(confetti);
+
+                const duration = Math.random() * 3 + 2;
+                confetti.animate([
+                    { transform: `translate3d(0, 0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random()*200 - 100}px, 100vh, 0) rotate(${Math.random()*720}deg)`, opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(.37,0,.63,1)',
+                    fill: 'forwards'
+                });
+
+                setTimeout(() => confetti.remove(), duration * 1000);
+            }
+        }
+    </script>
+</body>
+</html>
